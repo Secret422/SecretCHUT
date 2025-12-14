@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>◆ CYPHER_TERMINAL_3.2 - Clé Unique ◆</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Major+Mono+Display&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ------------------
+         * STYLES GLOBAUX
+         * ------------------ */
+        :root {
+            --bg-dark: #0f0f0f;
+            --main-neon: #00ff6a; /* Vert néon brillant (Chiffrement) */
+            --secondary-neon: #ff00ff; /* Magenta/Violet (Déchiffrement) */
+            --error-color: #ff3333;
+        }
+
+        body {
+            font-family: 'Major Mono Display', monospace;
+            background-color: var(--bg-dark);
+            color: var(--main-neon);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden; 
+        }
+
+        /* Effet de fond "Matrice" */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                repeating-linear-gradient(
+                    0deg,
+                    var(--bg-dark),
+                    var(--bg-dark) 1px,
+                    var(--main-neon) 2px,
+                    var(--bg-dark) 3px,
+                    var(--bg-dark) 100px
+                );
+            opacity: 0.05;
+            animation: backgroundScan 120s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes backgroundScan {
+            to {
+                background-position: 0 10000px;
+            }
+        }
+
+        /* ------------------
+         * CONTENEUR PRINCIPAL
+         * ------------------ */
+        .cypher-terminal {
+            width: 90%;
+            max-width: 900px;
+            background-color: #1a1a1a;
+            border: 2px solid var(--main-neon);
+            box-shadow: 0 0 15px var(--main-neon), 0 0 5px var(--main-neon) inset;
+            padding: 40px;
+            box-sizing: border-box;
+            border-radius: 5px;
+            animation: terminalLoad 1.5s ease-out;
+        }
+
+        @keyframes terminalLoad {
+            0% { opacity: 0; transform: scale(0.95) translateY(20px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        /* ------------------
+         * TEXTES & TITRES
+         * ------------------ */
+        h1 {
+            color: var(--secondary-neon);
+            text-align: center;
+            font-size: 1.8em;
+            margin-bottom: 25px;
+            text-shadow: 0 0 8px var(--secondary-neon);
+            border-bottom: 1px dashed var(--main-neon);
+            padding-bottom: 10px;
+        }
+        
+        .label-neon {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 1em;
+            color: var(--main-neon);
+            text-shadow: 0 0 3px var(--main-neon);
+        }
+
+        /* ------------------
+         * CHAMPS DE TEXTE
+         * ------------------ */
+        textarea {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 5px; 
+            border: 1px solid var(--border-color);
+            background-color: #000000;
+            font-family: 'Major Mono Display', monospace;
+            font-size: 1em;
+            box-sizing: border-box;
+            resize: none;
+            min-height: 100px; 
+            box-shadow: 0 0 5px var(--main-neon) inset;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        
+        /* Entrée Française (Chiffrement) */
+        #french-input {
+            color: var(--main-neon);
+            border-color: #00ff6a55;
+        }
+
+        /* Entrée Symboles (Déchiffrement) */
+        #secret-input {
+            color: var(--secondary-neon);
+            border-color: #ff00ff55;
+            box-shadow: 0 0 5px var(--secondary-neon) inset;
+        }
+
+        /* Zone de Résultat */
+        #output-result {
+            color: #ffffff; 
+            background-color: #0d0d0d;
+            border: 1px solid #ffffff55;
+            min-height: 120px;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--main-neon);
+            box-shadow: 0 0 10px var(--main-neon) inset, 0 0 10px var(--main-neon);
+        }
+
+        /* ------------------
+         * BOUTONS
+         * ------------------ */
+        .action-button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 30px;
+            font-family: 'Major Mono Display', monospace;
+            font-size: 1em;
+            cursor: pointer;
+            border: 1px solid;
+            background: none;
+            transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+        }
+
+        .button-chiffrement {
+            color: var(--main-neon);
+            border-color: var(--main-neon);
+            box-shadow: 0 0 5px var(--main-neon);
+        }
+
+        .button-chiffrement:hover {
+            background-color: var(--main-neon);
+            color: var(--bg-dark);
+        }
+
+        .button-dechiffrement {
+            color: var(--secondary-neon);
+            border-color: var(--secondary-neon);
+            box-shadow: 0 0 5px var(--secondary-neon);
+        }
+
+        .button-dechiffrement:hover {
+            background-color: var(--secondary-neon);
+            color: var(--bg-dark);
+        }
+        
+        /* Effets d'interaction (maintenus) */
+        #french-input::placeholder, #secret-input::placeholder {
+            color: var(--main-neon);
+            opacity: 0.4;
+            animation: cursorBlink 1s infinite step-end;
+        }
+
+        @keyframes cursorBlink {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 0.1; }
+        }
+
+        h1:hover {
+            animation: textGlitch 0.5s infinite alternate;
+        }
+
+        @keyframes textGlitch {
+            0% { text-shadow: 1px 0 5px var(--secondary-neon); transform: translateX(0); }
+            50% { text-shadow: -1px 2px 5px var(--main-neon); transform: translateX(2px); }
+            100% { text-shadow: 1px -1px 5px var(--secondary-neon); transform: translateX(-1px); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="cypher-terminal">
+        <h1>◆ CYPHER_TERMINAL_3.2 - [CLÉ UNIQUE & RÉVERSIBLE] ◆</h1>
+
+        <label for="french-input" class="label-neon">
+            &gt; MODE_CHIFFREMENT [TEXTE_CLAIRE] :
+        </label>
+        <textarea 
+            id="french-input" 
+            placeholder="[SAISISSEZ LES DONNÉES CLAIRES À CRYPTER ICI...]"
+        ></textarea>
+        <button class="action-button button-chiffrement" onclick="translateToSecret()">
+            &gt;&gt; [EXECUTE_CRYPTAGE] &lt;&lt;
+        </button>
+        
+        <hr style="border-color: #ffffff11; margin: 30px 0;">
+
+        <label for="secret-input" class="label-neon" style="color: var(--secondary-neon); text-shadow: 0 0 3px var(--secondary-neon);">
+            &gt; MODE_DÉCHIFFREMENT [SYMBOLES_SÉCURISÉS] :
+        </label>
+        <textarea 
+            id="secret-input" 
+            placeholder="[COLLEZ LES SYMBOLES SECRETS À DÉCRYPTER ICI...]"
+        ></textarea>
+        <button class="action-button button-dechiffrement" onclick="translateToFrench()">
+            &gt;&gt; [EXECUTE_DECRYPTAGE] &lt;&lt;
+        </button>
+
+        <label for="output-result" class="label-neon" style="color: #ffffff;">
+            &gt; SORTIE_RÉSULTAT :
+        </label>
+        <textarea 
+            id="output-result" 
+            readonly 
+            placeholder="[LE RÉSULTAT DU DERNIER TRAITEMENT APPARAÎTRA ICI...]"
+        ></textarea>
+    </div>
+
+    <script>
+        /* * CLÉ DE CHIFFREMENT V3.2 - UNIQUE ET RÉVERSIBLE
+         * Chaque caractère est associé à un symbole unique.
+         */
+        const SECRET_KEY = {
+            // Minuscules
+            'a': 'φ', 'b': 'τ', 'c': 'λ', 'd': 'δ', 'e': 'ρ', 'f': 'θ', 'g': 'ξ',
+            'h': 'ω', 'i': 'ε', 'j': 'η', 'k': 'υ', 'l': 'χ', 'm': 'π', 'n': 'ζ',
+            'o': 'σ', 'p': 'ψ', 'q': 'β', 'r': 'γ', 's': 'μ', 't': 'ν', 'u': 'ο',
+            'v': 'ι', 'w': 'κ', 'x': '∇', 'y': 'ϵ', 'z': 'ℨ',
+            
+            // Majuscules
+            'A': '∫', 'B': '∑', 'C': '∏', 'D': '∂', 'E': '≠', 'F': '≈', 'G': '≥',
+            'H': '≤', 'I': '⊂', 'J': '⊃', 'K': '∩', 'L': '∪', 'M': '∀', 'N': '∃',
+            'O': '∴', 'P': '∵', 'Q': '⊄', // <-- CORRECTION APPORTÉE : ∇ remplacé par ⊄
+            'R': 'ℜ', 'S': 'ℑ', 'T': '†', 'U': '‡', 'V': '§', 'W': '©', 'X': '®', 'Y': '™', 'Z': '¢',
+            
+            // BONUS : Chiffres et Ponctuation
+            '0': 'Ͽ', '1': '∛', '2': '∜', '3': '√', '4': 'ℵ',
+            '5': 'ℶ', '6': 'ℷ', '7': '℧', '8': 'ↄ', '9': 'ℸ',
+            '.': '░', ',': '▒', '!': '▓', '?': '█', ':': 'Ξ', ';': 'Ø', ' ': '─',
+        };
+
+        const DECRYPT_KEY = {};
+        for (const frenchChar in SECRET_KEY) {
+            const cypherSymbol = SECRET_KEY[frenchChar];
+            DECRYPT_KEY[cypherSymbol] = frenchChar;
+        }
+
+        // --- FONCTION 1 : CHIFFREMENT (Français -> Symboles) ---
+        function translateToSecret() {
+            const frenchInput = document.getElementById('french-input').value;
+            let secretOutput = '';
+
+            for (let i = 0; i < frenchInput.length; i++) {
+                const char = frenchInput[i];
+                secretOutput += SECRET_KEY[char] || char; 
+            }
+
+            document.getElementById('output-result').value = secretOutput;
+            triggerGlitch('output-result', 1); 
+            
+            // Nettoyage
+            document.getElementById('secret-input').value = '';
+        }
+
+        // --- FONCTION 2 : DÉCHIFFREMENT (Symboles -> Français) ---
+        function translateToFrench() {
+            const secretInput = document.getElementById('secret-input').value;
+            let frenchOutput = '';
+            
+            for (let i = 0; i < secretInput.length; i++) {
+                const symbol = secretInput[i];
+                frenchOutput += DECRYPT_KEY[symbol] || symbol; 
+            }
+
+            document.getElementById('output-result').value = frenchOutput;
+            triggerGlitch('output-result', 2); 
+            
+            // Nettoyage
+            document.getElementById('french-input').value = '';
+        }
+
+        // --- FONCTION D'EFFET VISUEL (Glitch) ---
+        function triggerGlitch(elementId, mode) {
+            const element = document.getElementById(elementId);
+            element.classList.remove('glitch-effect-green', 'glitch-effect-magenta');
+
+            if (mode === 1) { // Chiffrement (Vert)
+                 element.classList.add('glitch-effect-green');
+            } else if (mode === 2) { // Déchiffrement (Magenta)
+                 element.classList.add('glitch-effect-magenta');
+            }
+            
+            setTimeout(() => {
+                element.classList.remove('glitch-effect-green', 'glitch-effect-magenta');
+            }, 100); 
+        }
+
+        /* Styles dynamiques pour le Glitch */
+        const style = document.createElement('style');
+        style.type = 'text/css';
+        style.innerHTML = `
+            .glitch-effect-green {
+                animation: fastGlitchGreen 0.1s linear 2;
+            }
+            @keyframes fastGlitchGreen {
+                0% { transform: translate(1px, 1px); color: var(--main-neon); }
+                50% { transform: translate(-1px, -1px); color: var(--secondary-neon); }
+                100% { transform: translate(0, 0); color: #ffffff; }
+            }
+            
+            .glitch-effect-magenta {
+                animation: fastGlitchMagenta 0.1s linear 2;
+            }
+            @keyframes fastGlitchMagenta {
+                0% { transform: translate(1px, 1px); color: var(--secondary-neon); }
+                50% { transform: translate(-1px, -1px); color: var(--main-neon); }
+                100% { transform: translate(0, 0); color: #ffffff; }
+            }
+        `;
+        document.getElementsByTagName('head')[0].appendChild(style);
+
+    </script>
+
+</body>
+</html>
