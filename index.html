@@ -3,25 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>◆ CYPHER_TERMINAL_3.2 - Clé Unique ◆</title>
+    <title>■ TIM ALEXI // INTERFACE SÉCURISÉE V5 ■</title>
+    <link rel="shortcut icon" href="./—Pngtree—bursting bubble of water_9005553.png">
     
-    <link href="https://fonts.googleapis.com/css2?family=Major+Mono+Display&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
     
     <style>
         /* ------------------
-         * STYLES GLOBAUX
+         * STYLES GLOBAUX & COULEURS (THÈME AQUATIQUE)
          * ------------------ */
         :root {
-            --bg-dark: #0f0f0f;
-            --main-neon: #00ff6a; /* Vert néon brillant (Chiffrement) */
-            --secondary-neon: #ff00ff; /* Magenta/Violet (Déchiffrement) */
-            --error-color: #ff3333;
+            --bg-dark: #021226;      /* Bleu nuit profond */
+            --main-water: #00FFFF;    /* Cyan/Turquoise Lumineux */
+            --accent-sea: #00FF8C;    /* Vert d'eau/Émeraude */
+            --border-color: #00FFFF44; 
+            --active-shadow: 0 0 15px var(--main-water);
         }
 
         body {
-            font-family: 'Major Mono Display', monospace;
+            font-family: 'Roboto Mono', monospace;
             background-color: var(--bg-dark);
-            color: var(--main-neon);
+            color: var(--main-water);
             margin: 0;
             padding: 0;
             display: flex;
@@ -31,7 +33,21 @@
             overflow: hidden; 
         }
 
-        /* Effet de fond "Matrice" */
+        /* Optimisation mobile: Marge pour petit écran */
+        @media (max-width: 600px) {
+            .cypher-terminal {
+                padding: 15px;
+                width: 95%;
+            }
+            h1 {
+                font-size: 1.2em;
+            }
+            textarea, .action-button {
+                font-size: 0.9em;
+            }
+        }
+
+        /* Effet de fond : Ondulation aquatique subtile */
         body::before {
             content: '';
             position: fixed;
@@ -39,229 +55,253 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: 
-                repeating-linear-gradient(
-                    0deg,
-                    var(--bg-dark),
-                    var(--bg-dark) 1px,
-                    var(--main-neon) 2px,
-                    var(--bg-dark) 3px,
-                    var(--bg-dark) 100px
-                );
-            opacity: 0.05;
-            animation: backgroundScan 120s linear infinite;
+            background: radial-gradient(circle at 50% 50%, 
+                #00FFFF05 1%, 
+                #021226FF 80%
+            );
+            opacity: 0.5; 
+            animation: waterRipple 20s ease-in-out infinite alternate;
             z-index: -1;
         }
 
-        @keyframes backgroundScan {
-            to {
-                background-position: 0 10000px;
-            }
+        @keyframes waterRipple {
+            0% { transform: scale(1.0); opacity: 0.5; }
+            100% { transform: scale(1.1); opacity: 0.6; }
         }
 
         /* ------------------
-         * CONTENEUR PRINCIPAL
+         * EFFET DE BULLES QUI TOMBENT (MISE À JOUR)
+         * ------------------ */
+        #bubble-system {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none; 
+            overflow: hidden;
+            z-index: 0; 
+        }
+
+        .bubble {
+            position: absolute;
+            width: 8px; 
+            height: 8px;
+            border-radius: 50%; 
+            background: var(--main-water);
+            opacity: 0.3; 
+            box-shadow: 0 0 5px var(--main-water);
+            transform: translateY(-10vh); /* Commence AU-DESSUS de l'écran */
+            animation: fallDown 15s linear infinite;
+        }
+
+        /* Définir l'animation de CHUTE de haut en bas */
+        @keyframes fallDown {
+            0% { 
+                transform: translateY(-10vh) translateX(0); 
+                opacity: 0; 
+            }
+            50% {
+                transform: translateY(50vh) translateX(5px);
+                opacity: 0.5;
+            }
+            100% { 
+                transform: translateY(110vh) translateX(-5px); 
+                opacity: 0; /* Disparaît en bas */
+            }
+        }
+        
+        /* Personnaliser les délais et tailles (conservé pour l'aléatoire) */
+        .bubble:nth-child(2n) { animation-delay: 2s; animation-duration: 12s; width: 6px; height: 6px; }
+        .bubble:nth-child(3n) { animation-delay: 4s; animation-duration: 8s; width: 10px; height: 10px; }
+        .bubble:nth-child(5n) { animation-delay: 1s; animation-duration: 18s; opacity: 0.1; }
+
+
+        /* ------------------
+         * CONTENEUR PRINCIPAL (Terminal)
          * ------------------ */
         .cypher-terminal {
             width: 90%;
             max-width: 900px;
-            background-color: #1a1a1a;
-            border: 2px solid var(--main-neon);
-            box-shadow: 0 0 15px var(--main-neon), 0 0 5px var(--main-neon) inset;
-            padding: 40px;
+            background-color: #010A14; 
+            border: 2px solid var(--main-water);
+            box-shadow: var(--active-shadow) inset, 0 0 20px var(--main-water);
+            padding: 30px; 
             box-sizing: border-box;
-            border-radius: 5px;
-            animation: terminalLoad 1.5s ease-out;
+            border-radius: 10px; 
+            opacity: 0; 
+            animation: terminalFadeIn 1.5s ease-out forwards;
+            position: relative;
+            z-index: 10; 
+        }
+        
+        /* Bulle décorative d'angle */
+        .cypher-terminal::after {
+            content: '';
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: var(--main-water);
+            box-shadow: 0 0 10px var(--main-water);
+            opacity: 0.8;
+            animation: floatBubble 5s ease-in-out infinite;
+        }
+        
+        @keyframes floatBubble { /* Animation de la petite bulle d'angle */
+            0% { transform: translateY(0); opacity: 0.8; }
+            50% { transform: translateY(-5px); opacity: 1; }
+            100% { transform: translateY(0); opacity: 0.8; }
         }
 
-        @keyframes terminalLoad {
-            0% { opacity: 0; transform: scale(0.95) translateY(20px); }
-            100% { opacity: 1; transform: scale(1) translateY(0); }
+        @keyframes terminalFadeIn {
+            0% { opacity: 0; transform: translateY(50px); }
+            100% { opacity: 1; transform: translateY(0); }
         }
-
+        
         /* ------------------
-         * TEXTES & TITRES
+         * TITRES ET TEXTES (SIMPLIFIÉS)
          * ------------------ */
         h1 {
-            color: var(--secondary-neon);
+            color: var(--accent-sea);
             text-align: center;
-            font-size: 1.8em;
-            margin-bottom: 25px;
-            text-shadow: 0 0 8px var(--secondary-neon);
-            border-bottom: 1px dashed var(--main-neon);
-            padding-bottom: 10px;
+            font-size: 1.5em; 
+            margin-bottom: 20px;
+            text-shadow: 0 0 5px var(--accent-sea);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 8px;
+            font-weight: 700;
         }
         
-        .label-neon {
+        .label-pro {
             display: block;
-            margin-bottom: 10px;
-            font-size: 1em;
-            color: var(--main-neon);
-            text-shadow: 0 0 3px var(--main-neon);
+            margin-bottom: 8px;
+            font-size: 0.9em;
+            color: var(--main-water);
+            font-weight: 700;
         }
 
-        /* ------------------
-         * CHAMPS DE TEXTE
-         * ------------------ */
         textarea {
             width: 100%;
-            padding: 15px;
+            padding: 12px;
             margin-bottom: 5px; 
             border: 1px solid var(--border-color);
-            background-color: #000000;
-            font-family: 'Major Mono Display', monospace;
-            font-size: 1em;
+            background-color: #000810;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.95em;
+            color: var(--main-water);
             box-sizing: border-box;
             resize: none;
-            min-height: 100px; 
-            box-shadow: 0 0 5px var(--main-neon) inset;
-            transition: border-color 0.3s, box-shadow 0.3s;
+            min-height: 90px;
+            line-height: 1.4;
         }
         
-        /* Entrée Française (Chiffrement) */
-        #french-input {
-            color: var(--main-neon);
-            border-color: #00ff6a55;
-        }
-
-        /* Entrée Symboles (Déchiffrement) */
-        #secret-input {
-            color: var(--secondary-neon);
-            border-color: #ff00ff55;
-            box-shadow: 0 0 5px var(--secondary-neon) inset;
-        }
-
-        /* Zone de Résultat */
+        /* Placeholders personnalisés */
         #output-result {
-            color: #ffffff; 
-            background-color: #0d0d0d;
-            border: 1px solid #ffffff55;
-            min-height: 120px;
+            color: var(--accent-sea);
+            background-color: #000408;
+            letter-spacing: 1px;
+            border: 1px solid var(--accent-sea);
         }
+        
+        #french-input::placeholder { color: var(--main-water); opacity: 0.6; }
+        #secret-input::placeholder { color: var(--main-water); opacity: 0.6; }
+        #output-result::placeholder { color: #ffffff; opacity: 0.9; }
 
-        textarea:focus {
-            outline: none;
-            border-color: var(--main-neon);
-            box-shadow: 0 0 10px var(--main-neon) inset, 0 0 10px var(--main-neon);
-        }
-
-        /* ------------------
-         * BOUTONS
-         * ------------------ */
+        /* Boutons (pas de changement) */
         .action-button {
             width: 100%;
             padding: 10px;
-            margin-bottom: 30px;
-            font-family: 'Major Mono Display', monospace;
-            font-size: 1em;
+            margin-bottom: 25px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.95em;
             cursor: pointer;
-            border: 1px solid;
+            border: 2px solid;
             background: none;
             transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+            font-weight: 700;
         }
 
-        .button-chiffrement {
-            color: var(--main-neon);
-            border-color: var(--main-neon);
-            box-shadow: 0 0 5px var(--main-neon);
-        }
+        .button-chiffrement { color: var(--main-water); border-color: var(--main-water); }
+        .button-chiffrement:hover { background-color: var(--main-water); color: var(--bg-dark); box-shadow: var(--active-shadow); }
 
-        .button-chiffrement:hover {
-            background-color: var(--main-neon);
-            color: var(--bg-dark);
-        }
-
-        .button-dechiffrement {
-            color: var(--secondary-neon);
-            border-color: var(--secondary-neon);
-            box-shadow: 0 0 5px var(--secondary-neon);
-        }
-
-        .button-dechiffrement:hover {
-            background-color: var(--secondary-neon);
-            color: var(--bg-dark);
-        }
-        
-        /* Effets d'interaction (maintenus) */
-        #french-input::placeholder, #secret-input::placeholder {
-            color: var(--main-neon);
-            opacity: 0.4;
-            animation: cursorBlink 1s infinite step-end;
-        }
-
-        @keyframes cursorBlink {
-            0%, 100% { opacity: 0.4; }
-            50% { opacity: 0.1; }
-        }
-
-        h1:hover {
-            animation: textGlitch 0.5s infinite alternate;
-        }
-
-        @keyframes textGlitch {
-            0% { text-shadow: 1px 0 5px var(--secondary-neon); transform: translateX(0); }
-            50% { text-shadow: -1px 2px 5px var(--main-neon); transform: translateX(2px); }
-            100% { text-shadow: 1px -1px 5px var(--secondary-neon); transform: translateX(-1px); }
-        }
+        .button-dechiffrement { color: var(--accent-sea); border-color: var(--accent-sea); }
+        .button-dechiffrement:hover { background-color: var(--accent-sea); color: var(--bg-dark); box-shadow: 0 0 15px var(--accent-sea); }
     </style>
 </head>
 <body>
 
-    <div class="cypher-terminal">
-        <h1>◆ CYPHER_TERMINAL_3.2 - [CLÉ UNIQUE & RÉVERSIBLE] ◆</h1>
+    <div id="bubble-system">
+        <div class="bubble" style="left: 5%;"></div>
+        <div class="bubble" style="left: 15%; animation-delay: 2s; animation-duration: 12s;"></div>
+        <div class="bubble" style="left: 25%; animation-delay: 4s; animation-duration: 8s;"></div>
+        <div class="bubble" style="left: 35%; animation-delay: 1s; animation-duration: 15s;"></div>
+        <div class="bubble" style="left: 45%; animation-delay: 5s; animation-duration: 10s;"></div>
+        <div class="bubble" style="left: 55%; animation-delay: 3s; animation-duration: 7s;"></div>
+        <div class="bubble" style="left: 65%; animation-delay: 0.5s; animation-duration: 16s;"></div>
+        <div class="bubble" style="left: 75%; animation-delay: 6s; animation-duration: 11s;"></div>
+        <div class="bubble" style="left: 85%; animation-delay: 2.5s; animation-duration: 9s;"></div>
+        <div class="bubble" style="left: 95%; animation-delay: 4.5s; animation-duration: 14s;"></div>
+        <div class="bubble" style="left: 10%; animation-delay: 7s; animation-duration: 13s;"></div>
+        <div class="bubble" style="left: 20%; animation-delay: 1.5s; animation-duration: 17s;"></div>
+        <div class="bubble" style="left: 50%; animation-delay: 3.5s; animation-duration: 9.5s;"></div>
+        <div class="bubble" style="left: 70%; animation-delay: 5.5s; animation-duration: 8.5s;"></div>
+        <div class="bubble" style="left: 90%; animation-delay: 0s; animation-duration: 6s;"></div>
+    </div>
 
-        <label for="french-input" class="label-neon">
-            &gt; MODE_CHIFFREMENT [TEXTE_CLAIRE] :
+
+    <div class="cypher-terminal">
+        <h1>■ TIM ALEXI // INTERFACE SÉCURISÉE V5 ■</h1>
+
+        <label for="french-input" class="label-pro">
+            [01] MESSAGE CLAIR :
         </label>
         <textarea 
             id="french-input" 
-            placeholder="[SAISISSEZ LES DONNÉES CLAIRES À CRYPTER ICI...]"
+            placeholder="[01] FR"
         ></textarea>
         <button class="action-button button-chiffrement" onclick="translateToSecret()">
-            &gt;&gt; [EXECUTE_CRYPTAGE] &lt;&lt;
+            >> [-CRYPTAGE-]
         </button>
         
-        <hr style="border-color: #ffffff11; margin: 30px 0;">
+        <hr style="border-color: #00FFFF33; margin: 20px 0; border-style: dashed;">
 
-        <label for="secret-input" class="label-neon" style="color: var(--secondary-neon); text-shadow: 0 0 3px var(--secondary-neon);">
-            &gt; MODE_DÉCHIFFREMENT [SYMBOLES_SÉCURISÉS] :
+        <label for="secret-input" class="label-pro" style="color: var(--accent-sea);">
+            [02] MESSAGE ENCODÉ :
         </label>
         <textarea 
             id="secret-input" 
-            placeholder="[COLLEZ LES SYMBOLES SECRETS À DÉCRYPTER ICI...]"
+            placeholder="[02] SECRET"
         ></textarea>
         <button class="action-button button-dechiffrement" onclick="translateToFrench()">
-            &gt;&gt; [EXECUTE_DECRYPTAGE] &lt;&lt;
+            >> [-DÉCRYPTAGE-]
         </button>
 
-        <label for="output-result" class="label-neon" style="color: #ffffff;">
-            &gt; SORTIE_RÉSULTAT :
+        <label for="output-result" class="label-pro" style="color: var(--accent-sea);">
+            [03] SORTIE :
         </label>
         <textarea 
             id="output-result" 
             readonly 
-            placeholder="[LE RÉSULTAT DU DERNIER TRAITEMENT APPARAÎTRA ICI...]"
+            placeholder="[03] TimAlexi"
         ></textarea>
     </div>
 
     <script>
-        /* * CLÉ DE CHIFFREMENT V3.2 - UNIQUE ET RÉVERSIBLE
-         * Chaque caractère est associé à un symbole unique.
-         */
+        /* * CLÉ DE CHIFFREMENT V3.2 - UNIQUE ET RÉVERSIBLE (Inchangée) */
         const SECRET_KEY = {
-            // Minuscules
             'a': 'φ', 'b': 'τ', 'c': 'λ', 'd': 'δ', 'e': 'ρ', 'f': 'θ', 'g': 'ξ',
             'h': 'ω', 'i': 'ε', 'j': 'η', 'k': 'υ', 'l': 'χ', 'm': 'π', 'n': 'ζ',
             'o': 'σ', 'p': 'ψ', 'q': 'β', 'r': 'γ', 's': 'μ', 't': 'ν', 'u': 'ο',
             'v': 'ι', 'w': 'κ', 'x': '∇', 'y': 'ϵ', 'z': 'ℨ',
             
-            // Majuscules
             'A': '∫', 'B': '∑', 'C': '∏', 'D': '∂', 'E': '≠', 'F': '≈', 'G': '≥',
             'H': '≤', 'I': '⊂', 'J': '⊃', 'K': '∩', 'L': '∪', 'M': '∀', 'N': '∃',
-            'O': '∴', 'P': '∵', 'Q': '⊄', // <-- CORRECTION APPORTÉE : ∇ remplacé par ⊄
+            'O': '∴', 'P': '∵', 'Q': '⊄', 
             'R': 'ℜ', 'S': 'ℑ', 'T': '†', 'U': '‡', 'V': '§', 'W': '©', 'X': '®', 'Y': '™', 'Z': '¢',
             
-            // BONUS : Chiffres et Ponctuation
             '0': 'Ͽ', '1': '∛', '2': '∜', '3': '√', '4': 'ℵ',
             '5': 'ℶ', '6': 'ℷ', '7': '℧', '8': 'ↄ', '9': 'ℸ',
             '.': '░', ',': '▒', '!': '▓', '?': '█', ':': 'Ξ', ';': 'Ø', ' ': '─',
@@ -273,79 +313,41 @@
             DECRYPT_KEY[cypherSymbol] = frenchChar;
         }
 
-        // --- FONCTION 1 : CHIFFREMENT (Français -> Symboles) ---
+        // --- FONCTIONS DE CRYPTAGE/DÉCRYPTAGE (Inchangées) ---
         function translateToSecret() {
             const frenchInput = document.getElementById('french-input').value;
             let secretOutput = '';
-
             for (let i = 0; i < frenchInput.length; i++) {
                 const char = frenchInput[i];
                 secretOutput += SECRET_KEY[char] || char; 
             }
-
             document.getElementById('output-result').value = secretOutput;
-            triggerGlitch('output-result', 1); 
-            
-            // Nettoyage
+            triggerProcessing('output-result', '#00FFFF'); 
             document.getElementById('secret-input').value = '';
         }
 
-        // --- FONCTION 2 : DÉCHIFFREMENT (Symboles -> Français) ---
         function translateToFrench() {
             const secretInput = document.getElementById('secret-input').value;
             let frenchOutput = '';
-            
             for (let i = 0; i < secretInput.length; i++) {
                 const symbol = secretInput[i];
                 frenchOutput += DECRYPT_KEY[symbol] || symbol; 
             }
-
             document.getElementById('output-result').value = frenchOutput;
-            triggerGlitch('output-result', 2); 
-            
-            // Nettoyage
+            triggerProcessing('output-result', '#00FF8C'); 
             document.getElementById('french-input').value = '';
         }
 
-        // --- FONCTION D'EFFET VISUEL (Glitch) ---
-        function triggerGlitch(elementId, mode) {
+        // --- FONCTION D'ANIMATION (Lueur Aquatique) ---
+        function triggerProcessing(elementId, color) {
             const element = document.getElementById(elementId);
-            element.classList.remove('glitch-effect-green', 'glitch-effect-magenta');
-
-            if (mode === 1) { // Chiffrement (Vert)
-                 element.classList.add('glitch-effect-green');
-            } else if (mode === 2) { // Déchiffrement (Magenta)
-                 element.classList.add('glitch-effect-magenta');
-            }
+            element.style.boxShadow = `0 0 15px ${color}`;
+            element.style.transition = 'box-shadow 0.15s ease-out';
             
             setTimeout(() => {
-                element.classList.remove('glitch-effect-green', 'glitch-effect-magenta');
-            }, 100); 
+                element.style.boxShadow = `0 0 5px ${color}33 inset`; 
+            }, 150); 
         }
-
-        /* Styles dynamiques pour le Glitch */
-        const style = document.createElement('style');
-        style.type = 'text/css';
-        style.innerHTML = `
-            .glitch-effect-green {
-                animation: fastGlitchGreen 0.1s linear 2;
-            }
-            @keyframes fastGlitchGreen {
-                0% { transform: translate(1px, 1px); color: var(--main-neon); }
-                50% { transform: translate(-1px, -1px); color: var(--secondary-neon); }
-                100% { transform: translate(0, 0); color: #ffffff; }
-            }
-            
-            .glitch-effect-magenta {
-                animation: fastGlitchMagenta 0.1s linear 2;
-            }
-            @keyframes fastGlitchMagenta {
-                0% { transform: translate(1px, 1px); color: var(--secondary-neon); }
-                50% { transform: translate(-1px, -1px); color: var(--main-neon); }
-                100% { transform: translate(0, 0); color: #ffffff; }
-            }
-        `;
-        document.getElementsByTagName('head')[0].appendChild(style);
 
     </script>
 
