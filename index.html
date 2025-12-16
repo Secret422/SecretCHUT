@@ -26,28 +26,85 @@
             color: var(--main-water);
             margin: 0;
             padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            overflow: hidden; /* Important pour les bulles en arrière-plan */
+            
+            /* Changement : Utilise un affichage par bloc standard */
+            display: block; 
+            
+            /* Défilement vertical normal activé */
+            overflow-y: scroll; 
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch; 
         }
 
-        /* Optimisation mobile: Marge pour petit écran */
+        /* ------------------
+         * CONTENEUR PRINCIPAL (Terminal) - Rapproché
+         * ------------------ */
+        .cypher-terminal {
+            width: 90%;
+            max-width: 900px;
+            background-color: #010A14; 
+            border: 2px solid var(--main-water);
+            box-shadow: var(--active-shadow) inset, 0 0 20px var(--main-water);
+            padding: 30px; 
+            box-sizing: border-box;
+            border-radius: 10px; 
+            opacity: 0; 
+            animation: terminalFadeIn 1.5s ease-out forwards;
+            position: relative;
+            z-index: 10; 
+            /* Marge auto pour centrer, marge verticale pour permettre le scroll */
+            margin: 40px auto; 
+        }
+        
+        @keyframes terminalFadeIn {
+            0% { opacity: 0; transform: translateY(50px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ------------------
+         * SECTIONS ESPACÉES MAIS COMPACTES
+         * ------------------ */
+        .separator {
+            /* Ligne de séparation (hr) utilisée pour espacer les blocs */
+            border-color: #00FFFF33; 
+            margin: 30px 0; /* Espacement désiré entre les sections */
+            border-style: dashed;
+        }
+
+        /* ------------------
+         * ÉLÉMENTS D'INTERFACE
+         * ------------------ */
+        h1 { color: var(--accent-sea); text-align: center; font-size: 1.5em; margin-bottom: 30px; text-shadow: 0 0 5px var(--accent-sea); border-bottom: 1px solid var(--border-color); padding-bottom: 8px; font-weight: 700; }
+        .label-pro { display: block; margin-bottom: 8px; font-size: 0.9em; color: var(--main-water); font-weight: 700; }
+        textarea { width: 100%; padding: 12px; margin-bottom: 5px; border: 1px solid var(--border-color); background-color: #000810; font-family: 'Roboto Mono', monospace; font-size: 0.95em; color: var(--main-water); box-sizing: border-box; resize: none; min-height: 90px; line-height: 1.4; }
+        
+        #output-result { color: var(--accent-sea); background-color: #000408; letter-spacing: 1px; border: 1px solid var(--accent-sea); }
+        
+        .action-button { width: 100%; padding: 10px; margin-bottom: 5px; font-family: 'Roboto Mono', monospace; font-size: 0.95em; cursor: pointer; border: 2px solid; background: none; transition: background-color 0.3s, color 0.3s, box-shadow 0.3s; font-weight: 700; }
+        .button-chiffrement { color: var(--main-water); border-color: var(--main-water); }
+        .button-chiffrement:hover { background-color: var(--main-water); color: var(--bg-dark); box-shadow: var(--active-shadow); }
+        .button-dechiffrement { color: var(--accent-sea); border-color: var(--accent-sea); }
+        .button-dechiffrement:hover { background-color: var(--accent-sea); color: var(--bg-dark); box-shadow: 0 0 15px var(--accent-sea); }
+
+        .copy-button { width: 100%; padding: 8px; font-family: 'Roboto Mono', monospace; font-size: 0.9em; cursor: pointer; border: 1px solid var(--main-water); background-color: transparent; color: var(--main-water); margin-top: 10px; transition: background-color 0.2s, color 0.2s; }
+        .copy-button:hover { background-color: var(--main-water); color: var(--bg-dark); box-shadow: 0 0 8px var(--main-water); }
+
+        /* Optimisation mobile: Rapproche les bords sur les petits écrans */
         @media (max-width: 600px) {
             .cypher-terminal {
                 padding: 15px;
-                width: 95%;
+                width: 100%; /* S'étend sur toute la largeur */
+                margin: 0 auto; /* Retire les marges sur mobile */
+                border-left: none;
+                border-right: none;
+                border-radius: 0; 
             }
-            h1 {
-                font-size: 1.2em;
-            }
-            textarea, .action-button, .copy-button { 
-                font-size: 0.9em;
-            }
+            h1 { font-size: 1.2em; }
+            textarea, .action-button, .copy-button { font-size: 0.9em; }
         }
 
-        /* Effet de fond : Ondulation aquatique subtile (Inchangé) */
+
+        /* --- Effets de fond (Inchangés) --- */
         body::before {
             content: '';
             position: fixed;
@@ -69,7 +126,6 @@
             100% { transform: scale(1.1); opacity: 0.6; }
         }
 
-        /* Effet de bulles (Inchangé) */
         #bubble-system {
             position: fixed;
             top: 0;
@@ -94,83 +150,14 @@
         }
 
         @keyframes fallDown {
-            0% { 
-                transform: translateY(-10vh) translateX(0); 
-                opacity: 0; 
-            }
-            50% {
-                transform: translateY(50vh) translateX(5px);
-                opacity: 0.5;
-            }
-            100% { 
-                transform: translateY(110vh) translateX(-5px); 
-                opacity: 0; 
-            }
+            0% { transform: translateY(-10vh) translateX(0); opacity: 0; }
+            50% { transform: translateY(50vh) translateX(5px); opacity: 0.5; }
+            100% { transform: translateY(110vh) translateX(-5px); opacity: 0; }
         }
         
         .bubble:nth-child(2n) { animation-delay: 2s; animation-duration: 12s; width: 6px; height: 6px; }
         .bubble:nth-child(3n) { animation-delay: 4s; animation-duration: 8s; width: 10px; height: 10px; }
         .bubble:nth-child(5n) { animation-delay: 1s; animation-duration: 18s; opacity: 0.1; }
-
-
-        /* ------------------
-         * CONTENEUR PRINCIPAL (Terminal) - Version Verticale Classique
-         * ------------------ */
-        .cypher-terminal {
-            width: 90%;
-            max-width: 900px;
-            background-color: #010A14; 
-            border: 2px solid var(--main-water);
-            box-shadow: var(--active-shadow) inset, 0 0 20px var(--main-water);
-            padding: 30px; /* Retour au padding complet */
-            box-sizing: border-box;
-            border-radius: 10px; 
-            opacity: 0; 
-            animation: terminalFadeIn 1.5s ease-out forwards;
-            position: relative;
-            z-index: 10; 
-        }
-        
-        @keyframes terminalFadeIn {
-            0% { opacity: 0; transform: translateY(50px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
-        
-        /* ------------------
-         * ÉLÉMENTS D'INTERFACE (Inchangés)
-         * ------------------ */
-        h1 { color: var(--accent-sea); text-align: center; font-size: 1.5em; margin-bottom: 20px; text-shadow: 0 0 5px var(--accent-sea); border-bottom: 1px solid var(--border-color); padding-bottom: 8px; font-weight: 700; }
-        .label-pro { display: block; margin-bottom: 8px; font-size: 0.9em; color: var(--main-water); font-weight: 700; }
-        textarea { width: 100%; padding: 12px; margin-bottom: 5px; border: 1px solid var(--border-color); background-color: #000810; font-family: 'Roboto Mono', monospace; font-size: 0.95em; color: var(--main-water); box-sizing: border-box; resize: none; min-height: 90px; line-height: 1.4; }
-        
-        #output-result { color: var(--accent-sea); background-color: #000408; letter-spacing: 1px; border: 1px solid var(--accent-sea); }
-
-        .action-button { width: 100%; padding: 10px; margin-bottom: 25px; font-family: 'Roboto Mono', monospace; font-size: 0.95em; cursor: pointer; border: 2px solid; background: none; transition: background-color 0.3s, color 0.3s, box-shadow 0.3s; font-weight: 700; }
-        .button-chiffrement { color: var(--main-water); border-color: var(--main-water); }
-        .button-chiffrement:hover { background-color: var(--main-water); color: var(--bg-dark); box-shadow: var(--active-shadow); }
-        .button-dechiffrement { color: var(--accent-sea); border-color: var(--accent-sea); }
-        .button-dechiffrement:hover { background-color: var(--accent-sea); color: var(--bg-dark); box-shadow: 0 0 15px var(--accent-sea); }
-
-        /* BOUTON COPIER */
-        .copy-button {
-            width: 100%;
-            padding: 8px;
-            font-family: 'Roboto Mono', monospace;
-            font-size: 0.9em;
-            cursor: pointer;
-            border: 1px solid var(--main-water);
-            background-color: transparent;
-            color: var(--main-water);
-            margin-top: 10px; 
-            transition: background-color 0.2s, color 0.2s;
-        }
-
-        .copy-button:hover {
-            background-color: var(--main-water);
-            color: var(--bg-dark);
-            box-shadow: 0 0 8px var(--main-water);
-        }
-        
     </style>
 </head>
 <body>
@@ -208,7 +195,7 @@
             >> CRYPTAGE
         </button>
         
-        <hr style="border-color: #00FFFF33; margin: 20px 0; border-style: dashed;">
+        <hr class="separator">
 
         <label for="secret-input" class="label-pro" style="color: var(--accent-sea);">
             [02] MESSAGE ENCODÉ :
@@ -220,6 +207,8 @@
         <button class="action-button button-dechiffrement" onclick="translateToFrench()">
             >> DÉCRYPTAGE
         </button>
+
+        <hr class="separator">
 
         <label for="output-result" class="label-pro" style="color: var(--accent-sea);">
             [03] SORTIE :
@@ -260,7 +249,7 @@
             DECRYPT_KEY[cypherSymbol] = frenchChar;
         }
 
-        // --- FONCTIONS DE CRYPTAGE/DÉCRYPTAGE (Inchangées) ---
+        // --- FONCTIONS DE CRYPTAGE/DÉCRYPTAGE ---
         function translateToSecret() {
             const frenchInput = document.getElementById('french-input').value;
             let secretOutput = '';
@@ -271,6 +260,9 @@
             document.getElementById('output-result').value = secretOutput;
             triggerProcessing('output-result', '#00FFFF'); 
             document.getElementById('secret-input').value = '';
+            
+            // DÉFILEMENT AUTOMATIQUE VERS LA SORTIE
+            scrollToSection('output-result');
         }
 
         function translateToFrench() {
@@ -283,6 +275,18 @@
             document.getElementById('output-result').value = frenchOutput;
             triggerProcessing('output-result', '#00FF8C'); 
             document.getElementById('french-input').value = '';
+
+            // DÉFILEMENT AUTOMATIQUE VERS LA SORTIE
+            scrollToSection('output-result');
+        }
+
+        // --- FONCTION DE SCROLL/DÉFILEMENT AUTOMATIQUE (Douceur) ---
+        function scrollToSection(elementId) {
+            const element = document.getElementById(elementId);
+            element.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center' 
+            });
         }
 
         // --- FONCTION D'ANIMATION (Lueur Aquatique) ---
