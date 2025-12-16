@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>■ TIM ALEXI // INTERFACE SÉCURISÉE V5 ■</title>
-    <link rel="shortcut icon" href="./—Pngtree—bursting bubble of water_9005553.png">
     
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
     
@@ -42,7 +41,7 @@
             h1 {
                 font-size: 1.2em;
             }
-            textarea, .action-button {
+            textarea, .action-button, .copy-button { 
                 font-size: 0.9em;
             }
         }
@@ -70,7 +69,7 @@
         }
 
         /* ------------------
-         * EFFET DE BULLES QUI TOMBENT (MISE À JOUR)
+         * EFFET DE BULLES QUI TOMBENT (Correction de l'animation)
          * ------------------ */
         #bubble-system {
             position: fixed;
@@ -91,11 +90,10 @@
             background: var(--main-water);
             opacity: 0.3; 
             box-shadow: 0 0 5px var(--main-water);
-            transform: translateY(-10vh); /* Commence AU-DESSUS de l'écran */
+            transform: translateY(-10vh); 
             animation: fallDown 15s linear infinite;
         }
 
-        /* Définir l'animation de CHUTE de haut en bas */
         @keyframes fallDown {
             0% { 
                 transform: translateY(-10vh) translateX(0); 
@@ -107,11 +105,10 @@
             }
             100% { 
                 transform: translateY(110vh) translateX(-5px); 
-                opacity: 0; /* Disparaît en bas */
+                opacity: 0; 
             }
         }
         
-        /* Personnaliser les délais et tailles (conservé pour l'aléatoire) */
         .bubble:nth-child(2n) { animation-delay: 2s; animation-duration: 12s; width: 6px; height: 6px; }
         .bubble:nth-child(3n) { animation-delay: 4s; animation-duration: 8s; width: 10px; height: 10px; }
         .bubble:nth-child(5n) { animation-delay: 1s; animation-duration: 18s; opacity: 0.1; }
@@ -135,100 +132,51 @@
             z-index: 10; 
         }
         
-        /* Bulle décorative d'angle */
-        .cypher-terminal::after {
-            content: '';
-            position: absolute;
-            top: -10px;
-            right: -10px;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background-color: var(--main-water);
-            box-shadow: 0 0 10px var(--main-water);
-            opacity: 0.8;
-            animation: floatBubble 5s ease-in-out infinite;
-        }
-        
-        @keyframes floatBubble { /* Animation de la petite bulle d'angle */
-            0% { transform: translateY(0); opacity: 0.8; }
-            50% { transform: translateY(-5px); opacity: 1; }
-            100% { transform: translateY(0); opacity: 0.8; }
-        }
-
         @keyframes terminalFadeIn {
             0% { opacity: 0; transform: translateY(50px); }
             100% { opacity: 1; transform: translateY(0); }
         }
         
         /* ------------------
-         * TITRES ET TEXTES (SIMPLIFIÉS)
+         * ÉLÉMENTS D'INTERFACE
          * ------------------ */
-        h1 {
-            color: var(--accent-sea);
-            text-align: center;
-            font-size: 1.5em; 
-            margin-bottom: 20px;
-            text-shadow: 0 0 5px var(--accent-sea);
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 8px;
-            font-weight: 700;
-        }
+        h1 { color: var(--accent-sea); text-align: center; font-size: 1.5em; margin-bottom: 20px; text-shadow: 0 0 5px var(--accent-sea); border-bottom: 1px solid var(--border-color); padding-bottom: 8px; font-weight: 700; }
+        .label-pro { display: block; margin-bottom: 8px; font-size: 0.9em; color: var(--main-water); font-weight: 700; }
+        textarea { width: 100%; padding: 12px; margin-bottom: 5px; border: 1px solid var(--border-color); background-color: #000810; font-family: 'Roboto Mono', monospace; font-size: 0.95em; color: var(--main-water); box-sizing: border-box; resize: none; min-height: 90px; line-height: 1.4; }
         
-        .label-pro {
-            display: block;
-            margin-bottom: 8px;
-            font-size: 0.9em;
-            color: var(--main-water);
-            font-weight: 700;
-        }
-
-        textarea {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 5px; 
-            border: 1px solid var(--border-color);
-            background-color: #000810;
-            font-family: 'Roboto Mono', monospace;
-            font-size: 0.95em;
-            color: var(--main-water);
-            box-sizing: border-box;
-            resize: none;
-            min-height: 90px;
-            line-height: 1.4;
-        }
-        
-        /* Placeholders personnalisés */
-        #output-result {
-            color: var(--accent-sea);
-            background-color: #000408;
-            letter-spacing: 1px;
-            border: 1px solid var(--accent-sea);
-        }
+        #output-result { color: var(--accent-sea); background-color: #000408; letter-spacing: 1px; border: 1px solid var(--accent-sea); }
         
         #french-input::placeholder { color: var(--main-water); opacity: 0.6; }
         #secret-input::placeholder { color: var(--main-water); opacity: 0.6; }
         #output-result::placeholder { color: #ffffff; opacity: 0.9; }
 
-        /* Boutons (pas de changement) */
-        .action-button {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 25px;
-            font-family: 'Roboto Mono', monospace;
-            font-size: 0.95em;
-            cursor: pointer;
-            border: 2px solid;
-            background: none;
-            transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
-            font-weight: 700;
-        }
-
+        /* Styles des boutons d'Action (Cryptage/Décryptage) */
+        .action-button { width: 100%; padding: 10px; margin-bottom: 25px; font-family: 'Roboto Mono', monospace; font-size: 0.95em; cursor: pointer; border: 2px solid; background: none; transition: background-color 0.3s, color 0.3s, box-shadow 0.3s; font-weight: 700; }
         .button-chiffrement { color: var(--main-water); border-color: var(--main-water); }
         .button-chiffrement:hover { background-color: var(--main-water); color: var(--bg-dark); box-shadow: var(--active-shadow); }
-
         .button-dechiffrement { color: var(--accent-sea); border-color: var(--accent-sea); }
         .button-dechiffrement:hover { background-color: var(--accent-sea); color: var(--bg-dark); box-shadow: 0 0 15px var(--accent-sea); }
+
+        /* NOUVEAU: BOUTON COPIER */
+        .copy-button {
+            width: 100%;
+            padding: 8px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.9em;
+            cursor: pointer;
+            border: 1px solid var(--main-water);
+            background-color: transparent;
+            color: var(--main-water);
+            margin-top: 10px; 
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        .copy-button:hover {
+            background-color: var(--main-water);
+            color: var(--bg-dark);
+            box-shadow: 0 0 8px var(--main-water);
+        }
+        
     </style>
 </head>
 <body>
@@ -263,7 +211,7 @@
             placeholder="[01] FR"
         ></textarea>
         <button class="action-button button-chiffrement" onclick="translateToSecret()">
-            >> [-CRYPTAGE-]
+            >> CRYPTAGE
         </button>
         
         <hr style="border-color: #00FFFF33; margin: 20px 0; border-style: dashed;">
@@ -276,7 +224,7 @@
             placeholder="[02] SECRET"
         ></textarea>
         <button class="action-button button-dechiffrement" onclick="translateToFrench()">
-            >> [-DÉCRYPTAGE-]
+            >> DÉCRYPTAGE
         </button>
 
         <label for="output-result" class="label-pro" style="color: var(--accent-sea);">
@@ -287,6 +235,11 @@
             readonly 
             placeholder="[03] TimAlexi"
         ></textarea>
+        
+        <button class="copy-button" id="copy-btn" onclick="copyOutputText()">
+            COPIER 
+        </button>
+
     </div>
 
     <script>
@@ -347,6 +300,53 @@
             setTimeout(() => {
                 element.style.boxShadow = `0 0 5px ${color}33 inset`; 
             }, 150); 
+        }
+
+        // ----------------------------------------------------
+        // FONCTION: COPIE DU TEXTE
+        // ----------------------------------------------------
+        function copyOutputText() {
+            const outputArea = document.getElementById('output-result');
+            const copyButton = document.getElementById('copy-btn');
+            
+            // 1. Sélectionner le texte
+            outputArea.select();
+            outputArea.setSelectionRange(0, 99999); 
+
+            // 2. Copier le texte
+            try {
+                // Tente d'utiliser l'API moderne pour copier
+                if (navigator.clipboard && window.isSecureContext) {
+                    navigator.clipboard.writeText(outputArea.value)
+                        .then(() => {
+                            copyButton.textContent = "COPIÉ !";
+                            setTimeout(() => {
+                                copyButton.textContent = "COPIER";
+                            }, 2000);
+                        })
+                        .catch(err => {
+                            // Fallback si l'API échoue
+                            document.execCommand('copy');
+                            copyButton.textContent = "COPIÉ !";
+                            setTimeout(() => {
+                                copyButton.textContent = "COPIER";
+                            }, 2000);
+                        });
+                } else {
+                    // Fallback direct
+                    document.execCommand('copy');
+                    copyButton.textContent = "COPIÉ !";
+                    setTimeout(() => {
+                        copyButton.textContent = "COPIER";
+                    }, 2000);
+                }
+            } catch (err) {
+                console.error('Erreur de copie:', err);
+                copyButton.textContent = "ÉCHEC DE COPIE !";
+                setTimeout(() => {
+                    copyButton.textContent = "COPIER";
+                }, 2000);
+            }
         }
 
     </script>
