@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>■ TIM ALEXI // INTERFACE SÉCURISÉE V5 ■</title>
+    <title>■ TIM ALEXI V5 ■</title>
+    <link rel="shortcut icon" href="./—Pngtree—bursting bubble of water_9005553.png">
     
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
     
@@ -12,9 +13,9 @@
          * STYLES GLOBAUX & COULEURS (THÈME AQUATIQUE)
          * ------------------ */
         :root {
-            --bg-dark: #021226;      /* Bleu nuit profond */
-            --main-water: #00FFFF;    /* Cyan/Turquoise Lumineux */
-            --accent-sea: #00FF8C;    /* Vert d'eau/Émeraude */
+            --bg-dark: #021226;
+            --main-water: #00FFFF;
+            --accent-sea: #00FF8C;
             --border-color: #00FFFF44; 
             --active-shadow: 0 0 15px var(--main-water);
         }
@@ -29,7 +30,7 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            overflow: hidden; 
+            overflow: hidden; /* Important pour les bulles en arrière-plan */
         }
 
         /* Optimisation mobile: Marge pour petit écran */
@@ -46,7 +47,7 @@
             }
         }
 
-        /* Effet de fond : Ondulation aquatique subtile */
+        /* Effet de fond : Ondulation aquatique subtile (Inchangé) */
         body::before {
             content: '';
             position: fixed;
@@ -68,9 +69,7 @@
             100% { transform: scale(1.1); opacity: 0.6; }
         }
 
-        /* ------------------
-         * EFFET DE BULLES QUI TOMBENT (Correction de l'animation)
-         * ------------------ */
+        /* Effet de bulles (Inchangé) */
         #bubble-system {
             position: fixed;
             top: 0;
@@ -115,7 +114,7 @@
 
 
         /* ------------------
-         * CONTENEUR PRINCIPAL (Terminal)
+         * CONTENEUR PRINCIPAL (Terminal) - Version Verticale Classique
          * ------------------ */
         .cypher-terminal {
             width: 90%;
@@ -123,7 +122,7 @@
             background-color: #010A14; 
             border: 2px solid var(--main-water);
             box-shadow: var(--active-shadow) inset, 0 0 20px var(--main-water);
-            padding: 30px; 
+            padding: 30px; /* Retour au padding complet */
             box-sizing: border-box;
             border-radius: 10px; 
             opacity: 0; 
@@ -138,26 +137,21 @@
         }
         
         /* ------------------
-         * ÉLÉMENTS D'INTERFACE
+         * ÉLÉMENTS D'INTERFACE (Inchangés)
          * ------------------ */
         h1 { color: var(--accent-sea); text-align: center; font-size: 1.5em; margin-bottom: 20px; text-shadow: 0 0 5px var(--accent-sea); border-bottom: 1px solid var(--border-color); padding-bottom: 8px; font-weight: 700; }
         .label-pro { display: block; margin-bottom: 8px; font-size: 0.9em; color: var(--main-water); font-weight: 700; }
         textarea { width: 100%; padding: 12px; margin-bottom: 5px; border: 1px solid var(--border-color); background-color: #000810; font-family: 'Roboto Mono', monospace; font-size: 0.95em; color: var(--main-water); box-sizing: border-box; resize: none; min-height: 90px; line-height: 1.4; }
         
         #output-result { color: var(--accent-sea); background-color: #000408; letter-spacing: 1px; border: 1px solid var(--accent-sea); }
-        
-        #french-input::placeholder { color: var(--main-water); opacity: 0.6; }
-        #secret-input::placeholder { color: var(--main-water); opacity: 0.6; }
-        #output-result::placeholder { color: #ffffff; opacity: 0.9; }
 
-        /* Styles des boutons d'Action (Cryptage/Décryptage) */
         .action-button { width: 100%; padding: 10px; margin-bottom: 25px; font-family: 'Roboto Mono', monospace; font-size: 0.95em; cursor: pointer; border: 2px solid; background: none; transition: background-color 0.3s, color 0.3s, box-shadow 0.3s; font-weight: 700; }
         .button-chiffrement { color: var(--main-water); border-color: var(--main-water); }
         .button-chiffrement:hover { background-color: var(--main-water); color: var(--bg-dark); box-shadow: var(--active-shadow); }
         .button-dechiffrement { color: var(--accent-sea); border-color: var(--accent-sea); }
         .button-dechiffrement:hover { background-color: var(--accent-sea); color: var(--bg-dark); box-shadow: 0 0 15px var(--accent-sea); }
 
-        /* NOUVEAU: BOUTON COPIER */
+        /* BOUTON COPIER */
         .copy-button {
             width: 100%;
             padding: 8px;
@@ -303,19 +297,16 @@
         }
 
         // ----------------------------------------------------
-        // FONCTION: COPIE DU TEXTE
+        // FONCTION: COPIE DU TEXTE (Inchangée)
         // ----------------------------------------------------
         function copyOutputText() {
             const outputArea = document.getElementById('output-result');
             const copyButton = document.getElementById('copy-btn');
             
-            // 1. Sélectionner le texte
             outputArea.select();
             outputArea.setSelectionRange(0, 99999); 
 
-            // 2. Copier le texte
             try {
-                // Tente d'utiliser l'API moderne pour copier
                 if (navigator.clipboard && window.isSecureContext) {
                     navigator.clipboard.writeText(outputArea.value)
                         .then(() => {
@@ -323,17 +314,8 @@
                             setTimeout(() => {
                                 copyButton.textContent = "COPIER";
                             }, 2000);
-                        })
-                        .catch(err => {
-                            // Fallback si l'API échoue
-                            document.execCommand('copy');
-                            copyButton.textContent = "COPIÉ !";
-                            setTimeout(() => {
-                                copyButton.textContent = "COPIER";
-                            }, 2000);
                         });
                 } else {
-                    // Fallback direct
                     document.execCommand('copy');
                     copyButton.textContent = "COPIÉ !";
                     setTimeout(() => {
